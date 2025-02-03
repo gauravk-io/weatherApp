@@ -140,4 +140,7 @@ body {
     .wind {
         font-size: 20px;
     }
+    .search button img {
+        width: 10px;
+    }
 }
