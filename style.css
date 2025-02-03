@@ -97,14 +97,47 @@ body {
     margin-bottom: 8px;
 }
 
-.weather{
+.weather {
     display: none;
 }
 
-.error{
+.error {
     text-align: left;
     margin-left: 10px;
     font-size: 14px;
     margin-top: 10px;
     display: none;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 30px 20px;
+    }
+
+    .search input {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .search button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .weather-icon {
+        width: 120px;
+    }
+
+    .weather h1 {
+        font-size: 50px;
+    }
+
+    .weather h2 {
+        font-size: 30px;
+    }
+
+    .humidity,
+    .wind {
+        font-size: 20px;
+    }
 }
