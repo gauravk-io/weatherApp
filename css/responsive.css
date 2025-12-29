@@ -53,7 +53,7 @@
     }
 
     .nav-btn span.text {
-        display: none; /* Hide text on mobile nav to save space */
+        display: none;
     }
     
     .nav-btn {

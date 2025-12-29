@@ -1,4 +1,4 @@
-/* Reset & Base */
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@
 
 body {
     background: var(--bg-body);
-    background-image: var(--bg-gradient-dark); /* Default dark gradient */
+    background-image: var(--bg-gradient-dark);
     color: var(--text-primary);
     font-family: var(--font-family);
     min-height: 100vh;
@@ -19,14 +19,14 @@ body {
     background-image: var(--bg-gradient-light);
 }
 
-/* Layout */
+
 .app-container {
     display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* Sidebar */
+
 .sidebar {
     width: 250px;
     background: var(--glass-bg);
@@ -88,11 +88,11 @@ body {
 }
 
 .nav-btn.active {
-    background: rgba(14, 165, 233, 0.15); /* Primary color low opacity */
+    background: rgba(14, 165, 233, 0.15);
     color: var(--primary-color);
 }
 
-/* Main Content */
+
 .main-content {
     flex: 1;
     display: flex;
@@ -102,7 +102,7 @@ body {
     position: relative;
 }
 
-/* Header */
+
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -227,7 +227,7 @@ body {
     color: var(--text-primary);
 }
 
-/* Dashboard Grid */
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -236,7 +236,7 @@ body {
     padding-bottom: var(--spacing-lg);
 }
 
-/* Cards */
+
 .weather-card, .highlight-card, .settings-card, .forecast-section, .daily-section, .charts-section {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
@@ -253,7 +253,7 @@ body {
     border-color: rgba(255,255,255,0.1);
 }
 
-/* Main Weather Card */
+
 .main-card {
     grid-column: span 1;
     grid-row: span 2;
@@ -262,7 +262,7 @@ body {
     justify-content: space-between;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    border: none; /* Gradient doesn't need border */
+    border: none;
 }
 
 .card-header {
@@ -350,7 +350,7 @@ body {
     font-size: var(--font-size-sm);
 }
 
-/* Highlights */
+
 .highlights-grid {
     grid-column: span 3;
     grid-row: span 2;
@@ -394,7 +394,7 @@ body {
     margin-left: 4px;
 }
 
-/* Gauge & Compass Visualization */
+
 .gauge, .compass {
     position: relative;
     display: flex;
@@ -430,7 +430,7 @@ body {
 .rising { color: var(--accent-color); }
 .setting { color: var(--secondary-color); }
 
-/* Forecast */
+
 .forecast-section {
     grid-column: span 4;
     overflow-x: auto;
@@ -490,7 +490,7 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Charts */
+
 .charts-section {
     grid-column: span 2;
 }
@@ -500,7 +500,7 @@ body {
     width: 100%;
 }
 
-/* Views */
+
 .view {
     display: none;
     height: 100%;
@@ -516,12 +516,12 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Map View */
+
 #map-view {
     height: 100%;
 }
 
-/* Settings */
+
 .settings-card {
     max-width: 600px;
     margin: 0 auto;

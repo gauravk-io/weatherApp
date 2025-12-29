@@ -52,7 +52,7 @@ export const UI = {
         elements.humidity.textContent = data.main.humidity;
         elements.visibility.textContent = (data.visibility / 1000).toFixed(1);
         
-        // UV index not available in current weather API (requires One Call API)
+
         elements.uvIndex.textContent = 'N/A';
         elements.uvText.textContent = 'Not available';
     },
@@ -68,7 +68,7 @@ export const UI = {
     renderForecast(data, units) {
         const tempUnit = units === 'metric' ? '°C' : '°F';
         
-        // Hourly Forecast (First 24 hours / 8 items)
+
         this.elements.hourlyForecast.innerHTML = data.list.slice(0, 8).map(item => `
             <div class="hourly-item">
                 <span>${formatTime(item.dt, data.city.timezone)}</span>
@@ -77,11 +77,11 @@ export const UI = {
             </div>
         `).join('');
 
-        // Daily Forecast (Approximation from 5-day/3-hour)
-        // We pick one reading per day (e.g., noon)
+
+
         let dailyData = data.list.filter(item => item.dt_txt.includes("12:00:00"));
         if (dailyData.length === 0) {
-            // Fallback: take every 8th item (approx 24h intervals)
+
             dailyData = data.list.filter((_, index) => index % 8 === 0);
         }
 
@@ -146,7 +146,7 @@ export const UI = {
     },
 
     showLoading() {
-        // Simple loading state
+
         this.elements.cityName.textContent = "Loading...";
     }
 };

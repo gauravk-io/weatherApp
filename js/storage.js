@@ -5,8 +5,8 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_SETTINGS = {
-    units: 'metric', // metric or imperial
-    theme: 'dark'    // dark or light
+    units: 'metric',
+    theme: 'dark'
 };
 
 export const Storage = {
@@ -39,11 +39,11 @@ export const Storage = {
 
     addRecentSearch(city) {
         let recent = this.getRecentSearches();
-        // Remove duplicates
+
         recent = recent.filter(r => !(r.lat === city.lat && r.lon === city.lon));
-        // Add to top
+
         recent.unshift(city);
-        // Limit to 5
+
         if (recent.length > 5) recent.pop();
         localStorage.setItem(STORAGE_KEYS.RECENT, JSON.stringify(recent));
     },

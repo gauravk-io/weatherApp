@@ -1,11 +1,11 @@
-// Chart.js is loaded via script tag in index.html
+
 
 let tempChartInstance = null;
 
 export function renderCharts(forecastData) {
     const ctx = document.getElementById('tempChart').getContext('2d');
     
-    // Extract data for the next 24 hours (8 data points)
+
     const labels = forecastData.list.slice(0, 8).map(item => {
         const date = new Date(item.dt * 1000);
         return date.getHours() + ':00';

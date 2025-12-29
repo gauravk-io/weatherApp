@@ -4,9 +4,9 @@ import { Storage } from './storage.js';
 import { renderCharts } from './charts.js';
 import { debounce } from './utils.js';
 
-// State
+
 let currentState = {
-    lat: 22.5726, // Default: Kolkata
+    lat: 22.5726,
     lon: 88.3639,
     city: 'Kolkata',
     units: 'metric',
@@ -16,7 +16,7 @@ let currentState = {
 let mapInstance = null;
 let mapMarker = null;
 
-// Initialization
+
 async function init() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./service-worker.js')
@@ -27,7 +27,7 @@ async function init() {
     loadSettings();
     setupEventListeners();
     
-    // Try to get user location, else use default
+
     console.log("Initializing app...");
     if (navigator.geolocation) {
         console.log("Requesting location...");
@@ -63,7 +63,7 @@ function loadSettings() {
 }
 
 function setupEventListeners() {
-    // Search
+
     const handleSearch = debounce(async (e) => {
         const query = e.target.value.trim();
         if (query.length < 3) {
@@ -86,7 +86,7 @@ function setupEventListeners() {
 
     UI.elements.citySearch.addEventListener('input', handleSearch);
 
-    // Search Button
+
     document.getElementById('search-btn').addEventListener('click', () => {
         const query = UI.elements.citySearch.value;
         if (query) {
@@ -100,7 +100,7 @@ function setupEventListeners() {
         }
     });
 
-    // Location Button
+
     document.getElementById('location-btn').addEventListener('click', () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
@@ -111,20 +111,20 @@ function setupEventListeners() {
         }
     });
 
-    // Theme Toggle
+
     UI.elements.themeToggle.addEventListener('click', () => {
         currentState.theme = currentState.theme === 'dark' ? 'light' : 'dark';
         UI.setTheme(currentState.theme);
         Storage.saveSettings({ ...Storage.getSettings(), theme: currentState.theme });
     });
 
-    // Unit Toggle
+
     UI.elements.unitToggle.addEventListener('click', toggleUnits);
     UI.elements.settingsUnit.addEventListener('change', (e) => {
         if (e.target.value !== currentState.units) toggleUnits();
     });
 
-    // Navigation
+
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -134,7 +134,7 @@ function setupEventListeners() {
             document.getElementById(btn.dataset.target).classList.add('active');
 
             if (btn.dataset.target === 'map-view') {
-                setTimeout(initMap, 100); // Delay to ensure container is visible
+                setTimeout(initMap, 100);
             }
         });
     });
@@ -162,10 +162,10 @@ async function fetchWeatherData() {
         UI.renderAQI(aqi);
         renderCharts(forecast);
         
-        // Add to recent searches
+
         Storage.addRecentSearch({ name: current.name, lat: currentState.lat, lon: currentState.lon });
         
-        // Update Map if initialized
+
         if (mapInstance) {
             mapInstance.setView([currentState.lat, currentState.lon], 10);
             if (mapMarker) mapMarker.setLatLng([currentState.lat, currentState.lon]);
@@ -193,7 +193,7 @@ function updateFavoritesUI() {
     );
 }
 
-// Map Initialization
+
 function initMap() {
     if (mapInstance) {
         mapInstance.invalidateSize();
@@ -208,18 +208,18 @@ function initMap() {
 
     mapMarker = L.marker([currentState.lat, currentState.lon]).addTo(mapInstance);
     
-    // Add click to map to get weather
+
     mapInstance.on('click', (e) => {
         currentState.lat = e.latlng.lat;
         currentState.lon = e.latlng.lng;
         mapMarker.setLatLng(e.latlng);
         fetchWeatherData();
-        // Switch back to dashboard
+
         document.querySelector('[data-target="dashboard"]').click();
     });
 }
 
-// Add current city to favorites (Helper for UI)
+
 window.addToFavorites = () => {
     const city = {
         name: document.getElementById('city-name').textContent.split(',')[0],
@@ -231,5 +231,5 @@ window.addToFavorites = () => {
     alert("Added to favorites!");
 };
 
-// Start App
+
 document.addEventListener('DOMContentLoaded', init);
