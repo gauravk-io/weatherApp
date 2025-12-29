@@ -1,48 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Pro Weather App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <div class="card">
-        <div class="search">
-            <input type="text" placeholder="Enter city name" spellcheck="false">
-            <button><img src="assets/search.png"></button>
-        </div>
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="assets/images/clear.png" alt="Logo" id="app-logo">
+                <span>WeatherPro</span>
+            </div>
+            <div class="nav-items">
+                <button class="nav-btn active" data-target="dashboard">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="text">Dashboard</span>
+                </button>
+                <button class="nav-btn" data-target="map-view">
+                    <i class="ri-map-2-line"></i>
+                    <span class="text">Map</span>
+                </button>
+                <button class="nav-btn" data-target="settings">
+                    <i class="ri-settings-4-line"></i>
+                    <span class="text">Settings</span>
+                </button>
+            </div>
+        </nav>
 
-        <div class="error">
-            <p>Invalid city name</p>
-        </div>
-
-        <div class="weather">
-            <img src="assets/rain.png" class="weather-icon">
-            <h1 class="temp">22°c</h1>
-            <h2 class="city">Kolkata</h2>
-            <div class="details">
-                <div class="col">
-                    <img src="assets/humidity.png">
-                    <div>
-                        <p class="humidity">50%</p>
-                        <p>Humidity</p>
-                    </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-bar">
+                <div class="search-container">
+                    <i class="ri-search-line search-icon"></i>
+                    <input type="text" id="city-search" placeholder="Search for cities...">
+                    <button id="search-btn" aria-label="Search" class="icon-btn"><i class="ri-arrow-right-line"></i></button>
+                    <button id="location-btn" aria-label="Use my location" class="icon-btn"><i class="ri-map-pin-user-line"></i></button>
+                    <div id="search-results" class="search-dropdown hidden"></div>
                 </div>
-                <div class="col">
-                    <img src="assets/wind.png">
-                    <div>
-                        <p class="wind">15 km/h</p>
-                        <p>Wind Speed</p>
+                <div class="user-actions">
+                    <button id="theme-toggle" aria-label="Toggle Theme" class="icon-btn"><i class="ri-moon-line"></i></button>
+                    <button id="unit-toggle" aria-label="Toggle Units" class="text-btn">°C</button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div id="dashboard" class="view active">
+                <div class="dashboard-grid">
+                    <!-- Current Weather Card -->
+                    <section class="weather-card main-card">
+                        <div class="card-header">
+                            <div class="location-info">
+                                <h2 id="city-name">Loading...</h2>
+                                <button onclick="addToFavorites()" class="icon-btn fav-btn" aria-label="Add to Favorites"><i class="ri-star-line"></i></button>
+                            </div>
+                            <p id="current-date">--</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="temp-container">
+                                <h1 id="current-temp">--°</h1>
+                                <p id="weather-desc">--</p>
+                            </div>
+                            <img id="weather-icon" src="" alt="Weather Icon" class="weather-icon-lg">
+                        </div>
+                        <div class="card-footer">
+                            <div class="stat-item">
+                                <span class="label">Feels Like</span>
+                                <span class="value" id="feels-like">--°</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="label">High/Low</span>
+                                <span class="value" id="high-low">--/--°</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Highlights Grid -->
+                    <section class="highlights-grid">
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-sun-line"></i>
+                                <h3>UV Index</h3>
+                            </div>
+                            <div class="gauge" id="uv-gauge">
+                                <span class="value" id="uv-index">--</span>
+                                <span class="status" id="uv-text">--</span>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-windy-line"></i>
+                                <h3>Wind Status</h3>
+                            </div>
+                            <div class="wind-info">
+                                <span class="value" id="wind-speed">--</span>
+                                <span class="unit">km/h</span>
+                                <div class="compass" id="wind-dir">
+                                    <i class="ri-arrow-up-circle-line" style="font-size: 2rem;"></i>
+                                    <span class="direction">N</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-sun-foggy-line"></i>
+                                <h3>Sunrise & Sunset</h3>
+                            </div>
+                            <div class="sun-times">
+                                <div class="sun-item">
+                                    <i class="ri-sun-fill rising"></i>
+                                    <span id="sunrise">--:--</span>
+                                </div>
+                                <div class="sun-item">
+                                    <i class="ri-moon-clear-fill setting"></i>
+                                    <span id="sunset">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-drop-line"></i>
+                                <h3>Humidity</h3>
+                            </div>
+                            <div class="humidity-info">
+                                <span class="value" id="humidity">--</span>
+                                <span class="unit">%</span>
+                                <p id="humidity-text">Normal</p>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-eye-line"></i>
+                                <h3>Visibility</h3>
+                            </div>
+                            <div class="visibility-info">
+                                <span class="value" id="visibility">--</span>
+                                <span class="unit">km</span>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="card-title">
+                                <i class="ri-lungs-line"></i>
+                                <h3>Air Quality</h3>
+                            </div>
+                            <div class="aqi-info">
+                                <span class="value" id="aqi">--</span>
+                                <span class="status" id="aqi-text">--</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Forecast Section -->
+                    <section class="forecast-section">
+                        <h3>Hourly Forecast</h3>
+                        <div class="hourly-container" id="hourly-forecast">
+                            <!-- Hourly items injected here -->
+                        </div>
+                    </section>
+
+                    <section class="daily-section">
+                        <h3>5-Day Forecast</h3>
+                        <div class="daily-container" id="daily-forecast">
+                            <!-- Daily items injected here -->
+                        </div>
+                    </section>
+                    
+                    <!-- Charts Section -->
+                    <section class="charts-section">
+                        <div class="chart-container">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Map View -->
+            <div id="map-view" class="view">
+                <div id="map" style="height: 100%; width: 100%; border-radius: var(--radius-md);"></div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings" class="view">
+                <div class="settings-card">
+                    <h2>Settings</h2>
+                    <div class="setting-item">
+                        <label>Units</label>
+                        <select id="settings-unit">
+                            <option value="metric">Metric (°C, km/h)</option>
+                            <option value="imperial">Imperial (°F, mph)</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <h3>Favorites</h3>
+                        <ul id="favorites-list">
+                            <!-- Favorites injected here -->
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
+
+        </main>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script type="module" src="js/app.js"></script>
 </body>
-
 </html>

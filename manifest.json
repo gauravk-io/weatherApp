@@ -1,0 +1,20 @@
+{
+  "name": "WeatherPro",
+  "short_name": "WeatherPro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#222222",
+  "theme_color": "#037ba0",
+  "icons": [
+    {
+      "src": "assets/images/clear.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/clear.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
